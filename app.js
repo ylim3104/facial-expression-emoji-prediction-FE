@@ -2,14 +2,14 @@ const stickersData = [
     { file: "1.png", x: 0, y: 150, size: 110 },
     { file: "2.png", x: 280, y: 0, size: 80 },
     { file: "3.png", x: 50, y: 2, size: 120 },
-    { file: "4.png", x: 400, y: 0, size: 90 },
+    { file: "4.png", x: 210, y: 0, size: 90 },
     { file: "5.png", x: 350, y: 200, size: 200 },
-    { file: "6.png", x: 200, y: 150, size: 110 },
+    { file: "6.png", x: 170, y: 130, size: 110 },
     { file: "7.png", x: 20, y: 485, size: 130 },
-    { file: "8.png", x: 330, y: 380, size: 70 },
+    { file: "8.png", x: 290, y: 380, size: 70 },
     { file: "9.png", x: 210, y: 540, size: 160 },
-    { file: "10.png", x: 320, y: 470, size: 155 },
-    { file: "11.png", x: 10, y: 350, size: 85 },
+    { file: "10.png", x: 295, y: 450, size: 155 },
+    { file: "11.png", x: 10, y: 598, size: 85 },
     { file: "12.png", x: 150, y:585, size: 80 }
 ];
 
