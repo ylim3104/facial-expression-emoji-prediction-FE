@@ -1,31 +1,41 @@
 /* Google pixel font */
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
 body {
+    padding-top: 60px;
     background: #d8b3f2;
     margin: 0;
     height: 100vh;
     display: flex;
     flex-direction: column;   /* <-- forces vertical alignment */
-    justify-content: center;  /* vertical centering */
+    justify-content: flex-start;  /* vertical centering */
     align-items: center;       /* horizontal centering */
 }
 
 .y2k-title {
     font-family: 'Luckiest Guy', cursive;
     font-size: 85px;
-    color: #fe65b7;     /* neon yellow-green */
-    margin: 0 0 25px 0;
+    color: #fe65b7;    
+    margin: 0 0 0.05px 0;
+    white-space: nowrap;
+}
+
+.title-wrapper {
+    transform-origin: center;
 }
 
 .title-box {
     background: #eeede0;    /* orange-red */
-    padding: 4px 4px;
+    padding: 0.1px 15px;
     border-radius: 45px;
+    border: 3px solid #ffffff;
     display: inline-block;  /* keeps tight box */
-    transform: rotate(0deg); /* keep straight */
+    transform: rotate(-3deg); /* keep straight */
+}
+
+.window-content, .title-bar, .retro-btn {
+    font-family: 'VT323', monospace;
 }
 
 /* Main window box */
@@ -34,18 +44,23 @@ body {
     background: #e6c9ff;
     border: 3px solid #8c4fbb;
     box-shadow: 4px 4px 0 #000;
+    margin-top: 80px;
 }
 
 /* Title bar */
 .title-bar {
     background: #c58eff;
-    color: #2b0047;
+    color: #2b0047; /* change from #2b0047 */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px;
     border-bottom: 3px solid #8c4fbb;
     font-size: 22px;
+}
+.title-bar span {
+    font-weight: bold;
+    padding-left: 5px;
 }
 
 /* Close button */
@@ -69,7 +84,6 @@ body {
 
 /* Retro button */
 .retro-btn {
-    font-family: inherit;
     font-size: 20px;
     padding: 10px 30px;
     background: #ff91d4;
@@ -81,5 +95,27 @@ body {
 .retro-btn:hover {
     background: #ffa4e0;
 }
+
+/* For tablets / medium screens */
+@media (max-width: 800px) {
+    .title-wrapper {
+        transform: scale(0.85);
+    }
+}
+
+/* For smaller screens (large phones) */
+@media (max-width: 600px) {
+    .title-wrapper {
+        transform: scale(0.70);
+    }
+}
+
+/* For phones */
+@media (max-width: 450px) {
+    .title-wrapper {
+        transform: scale(0.55);
+    }
+}
+
 
 /* Sparkle stickers around the text */
