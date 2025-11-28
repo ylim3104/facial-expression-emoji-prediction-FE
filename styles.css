@@ -1,0 +1,85 @@
+/* Google pixel font */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
+body {
+    background: #d8b3f2;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;   /* <-- forces vertical alignment */
+    justify-content: center;  /* vertical centering */
+    align-items: center;       /* horizontal centering */
+}
+
+.y2k-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 85px;
+    color: #fe65b7;     /* neon yellow-green */
+    margin: 0 0 25px 0;
+}
+
+.title-box {
+    background: #eeede0;    /* orange-red */
+    padding: 4px 4px;
+    border-radius: 45px;
+    display: inline-block;  /* keeps tight box */
+    transform: rotate(0deg); /* keep straight */
+}
+
+/* Main window box */
+.window {
+    width: 350px;
+    background: #e6c9ff;
+    border: 3px solid #8c4fbb;
+    box-shadow: 4px 4px 0 #000;
+}
+
+/* Title bar */
+.title-bar {
+    background: #c58eff;
+    color: #2b0047;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 3px solid #8c4fbb;
+    font-size: 22px;
+}
+
+/* Close button */
+.close-btn {
+    background: #ff89c6;
+    border: 2px solid #7a2e5c;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 18px;
+}
+
+/* Content */
+.window-content {
+    padding: 20px;
+    font-size: 20px;
+}
+
+.main-text {
+    margin-bottom: 20px;
+}
+
+/* Retro button */
+.retro-btn {
+    font-family: inherit;
+    font-size: 20px;
+    padding: 10px 30px;
+    background: #ff91d4;
+    border: 3px solid #7a2e5c;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+}
+
+.retro-btn:hover {
+    background: #ffa4e0;
+}
+
+/* Sparkle stickers around the text */
