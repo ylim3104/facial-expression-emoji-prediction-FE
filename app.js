@@ -1,16 +1,16 @@
 const stickersData = [
     { file: "1.png", x: 0, y: 150, size: 110 },
-    { file: "2.png", x: 280, y: 0, size: 50 },
+    { file: "2.png", x: 280, y: 0, size: 80 },
     // { file: "3.png", x: 50, y: 2, size: 120 },
     { file: "4.png", x: 10, y: 0, size: 70 },
-    { file: "5.png", x: 300, y: 200, size: 150 },
-    { file: "6.png", x: 170, y: 130, size: 70 },
+    { file: "5.png", x: 340, y: 200, size: 150 },
+    { file: "6.png", x: 170, y: 170, size: 90 },
     // { file: "7.png", x: 20, y: 485, size: 130 },
-    { file: "8.png", x: 310, y: 380, size: 70 },
+    { file: "8.png", x: 310, y: 580, size: 70 },
     { file: "9.png", x: 20, y: 540, size: 160 },
     { file: "10.png", x: 295, y: 450, size: 155 },
-    { file: "11.png", x: 10, y: 408, size: 85 },
-    { file: "12.png", x: 150, y:460, size: 80 }
+    { file: "11.png", x: 10, y: 420, size: 85 },
+    { file: "12.png", x: 150, y:460, size: 100 }
 ];
 
 // const wrapper = document.querySelector('.stickers-wrapper');
