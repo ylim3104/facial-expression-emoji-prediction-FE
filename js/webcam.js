@@ -1,5 +1,5 @@
 // Get elements
-const video = document.getElementById("cam");
+const video = document.getElementById("webcam");
 const resultEl = document.getElementById("result");
 
 // Start camera

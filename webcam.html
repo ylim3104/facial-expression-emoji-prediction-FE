@@ -3,11 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mood Scanner</title>
+
+    <!-- Main styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Webcam-specific styles -->
+    <link rel="stylesheet" href="webcam.css">
 </head>
 <body>
-    <video id="cam" autoplay playsinline></video>
-    <div id="result"></div>
-    <script src="js/webcam.js"></script>
+
+    <button class="back-btn" id="back-btn">⟵</button>
+
+    <div class="window webcam-window">
+        <div class="title-bar">Mood Scanner</div>
+        <div class="window-content webcam-content">
+            <video id="webcam" autoplay></video>
+            <p id="status">Opening webcam...</p>
+            <div class="button-row">
+                <button class="retro-btn" id="photo-btn">📸 Take Picture</button>
+                <button class="retro-btn" id="video-btn">🎥 Record Video</button>
+            </div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script src="webcam.js"></script>
 </body>
 </html>

@@ -1,0 +1,156 @@
+body {
+    background: #d8b3f2;
+    height: 100vh;
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bigger window box */
+.webcam-window {
+    width: 480px;
+    background: #e6c9ff;
+    border: 3px solid #8c4fbb;
+    box-shadow: 4px 4px 0 #000;
+    margin-top: -60px;
+}
+
+.title-bar {
+    background: #c58eff;
+    color: #2b0047;
+    padding: 10px;
+    border-bottom: 3px solid #8c4fbb;
+    font-size: 26px;
+    font-family: 'VT323', monospace;
+    font-weight: bold;
+}
+
+.webcam-content {
+    padding: 25px;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* Bigger webcam view */
+video {
+    width: 430px;
+    
+    background: black;
+    border: 4px solid #8c4fbb;
+    box-shadow: 4px 4px 0 #000;
+    margin-bottom: 20px;
+    aspect-ratio: 3 / 4;
+    height: auto;
+}
+
+#status {
+    margin-top: 12px;
+    font-size: 24px;
+    color: #2b0047;
+}
+
+.button-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.retro-btn {
+    font-size: 22px;
+    padding: 12px 28px;
+    background: #ff91d4;
+    border: 3px solid #7a2e5c;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+}
+
+.retro-btn:hover {
+    background: #ffa4e0;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+
+    padding: 8px 18px;
+    background: #ff91d4;
+    border: 3px solid #7a2e5c;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+
+    z-index: 9999;
+}
+
+.back-btn:hover {
+    background: #ffa4e0;
+}
+
+@media (max-width: 600px) {
+
+    body {
+        padding-top: 10px !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        overflow-y: auto !important;
+        margin-top: 60px;
+    }
+
+    .webcam-window {
+        width: 92% !important;
+        transform: scale(0.88);          /* scales whole window smaller */
+        transform-origin: top center;
+        margin-top: 0 !important;
+    }
+
+    .title-bar {
+        font-size: 18px !important;
+        padding: 6px !important;
+    }
+
+    .webcam-content {
+        padding: 12px !important;
+        font-size: 16px !important;
+    }
+
+    /* Responsive video */
+    video {
+        width: 100% !important;
+        /* height: auto !important; */
+        max-height: 240px !important;
+        aspect-ratio: 3 / 4 !important;
+    }
+
+    #status {
+        font-size: 16px !important;
+        margin-top: 8px !important;
+    }
+
+    /* Buttons */
+    .button-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .retro-btn {
+        width: 100% !important;
+        font-size: 16px !important;
+        padding: 8px 0 !important;
+    }
+
+    /* Back button */
+    .back-btn {
+        transform: scale(0.8);  
+        top: 8px !important;
+        left: 8px !important;
+        z-index: 9999;
+    }
+}
