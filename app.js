@@ -56,3 +56,7 @@ stickersData.forEach(data => {
 
     wrapper.appendChild(sticker);
 });
+
+document.getElementById("start-btn").addEventListener("click", () => {
+    window.location.href = "webcam.html";
+});
