@@ -53,6 +53,8 @@ body {
     border: 3px solid #8c4fbb;
     box-shadow: 4px 4px 0 #000;
     margin-top: 80px;
+    position: relative;
+    z-index: 10;
 }
 
 /* Title bar */
@@ -138,4 +140,11 @@ body {
     transform: scale(1.3) rotate(-10deg);
 }
 
-
+.stickers-wrapper {
+    position: absolute; /* Allows stickers inside to be positioned absolutely */
+    top: 0;
+    left: 0;
+    width: 100%;    /* Covers the full width of the viewport */
+    height: 100%;   /* Covers the full height of the viewport */
+    z-index: 1;     /* Keep it under the main content box (assuming window is > 1) */
+}
