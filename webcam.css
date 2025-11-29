@@ -90,3 +90,38 @@ video {
 .back-btn:hover {
     background: #ffa4e0;
 }
+
+/* MOBILE FIXES */
+@media (max-width: 600px) {
+
+    body {
+        align-items: flex-start;   /* move box upward */
+        padding-top: 20px;
+        overflow-y: auto;          /* allow scrolling on phone */
+    }
+
+    .webcam-window {
+        width: 90%;                /* responsive width */
+        margin-top: 0;
+    }
+
+    video {
+        width: 100%;
+        height: auto;              /* keep aspect ratio */
+    }
+
+    .button-row {
+        flex-direction: column;    /* stack buttons vertically */
+        gap: 10px;
+    }
+
+    .retro-btn {
+        width: 100%;               /* full-width buttons on mobile */
+        padding: 12px 0;
+        font-size: 20px; 
+    }
+
+    #status {
+        font-size: 20px;
+    }
+}
