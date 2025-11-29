@@ -91,37 +91,62 @@ video {
     background: #ffa4e0;
 }
 
-/* MOBILE FIXES */
 @media (max-width: 600px) {
 
     body {
-        align-items: flex-start;   /* move box upward */
-        padding-top: 20px;
-        overflow-y: auto;          /* allow scrolling on phone */
+        padding-top: 10px !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        overflow-y: auto !important;
     }
 
     .webcam-window {
-        width: 90%;                /* responsive width */
-        margin-top: 0;
+        width: 92% !important;
+        transform: scale(0.88);          /* scales whole window smaller */
+        transform-origin: top center;
+        margin-top: 0 !important;
     }
 
+    .title-bar {
+        font-size: 18px !important;
+        padding: 6px !important;
+    }
+
+    .webcam-content {
+        padding: 12px !important;
+        font-size: 16px !important;
+    }
+
+    /* Responsive video */
     video {
-        width: 100%;
-        height: auto;              /* keep aspect ratio */
-    }
-
-    .button-row {
-        flex-direction: column;    /* stack buttons vertically */
-        gap: 10px;
-    }
-
-    .retro-btn {
-        width: 100%;               /* full-width buttons on mobile */
-        padding: 12px 0;
-        font-size: 20px; 
+        width: 100% !important;
+        height: auto !important;
+        max-height: 240px !important;
     }
 
     #status {
-        font-size: 20px;
+        font-size: 16px !important;
+        margin-top: 8px !important;
+    }
+
+    /* Buttons */
+    .button-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .retro-btn {
+        width: 100% !important;
+        font-size: 16px !important;
+        padding: 8px 0 !important;
+    }
+
+    /* Back button */
+    .back-btn {
+        transform: scale(0.8);  
+        top: 8px !important;
+        left: 8px !important;
+        z-index: 9999;
     }
 }
