@@ -3,12 +3,19 @@
 const webcamElement = document.getElementById("webcam");
 const statusText = document.getElementById("status");
 const resultEl = document.getElementById("result");
+let lastSent = 0;
+const MIN_DELAY = 350;  // 3 predictions per second
 
 // Portrait camera constraints
+// const videoConstraints = {
+//     video: {
+//         width: { ideal: 480 },
+//         height: { ideal: 640 }
+//     }
+// };
 const videoConstraints = {
     video: {
-        width: { ideal: 480 },
-        height: { ideal: 640 }
+        facingMode: "user"
     }
 };
 
@@ -48,7 +55,12 @@ document.getElementById("back-btn").addEventListener("click", () => {
 
 // Prediction loop
 async function loop() {
-    if (!webcamElement.videoWidth) return setTimeout(loop, 200);  // Skip if video not ready
+    const now = Date.now();
+    if (now - lastSent < MIN_DELAY) {
+        return requestAnimationFrame(loop);
+    }
+    lastSent = now;
+    if (!webcamElement.videoWidth) return requestAnimationFrame(loop);
 
     const canvas = document.createElement("canvas");
     canvas.width = 48;
@@ -74,7 +86,10 @@ async function loop() {
 
         const data = await response.json();
         if (data && data.emotion && data.confidence !== undefined) {
-            resultEl.innerText = `${data.emotion} (${data.confidence.toFixed(1)}%)`;
+            let conf = data.confidence;
+            if (conf <= 1) conf = conf * 100;  // auto-fix if backend returns 0–1
+            resultEl.innerText = `${data.emotion} (${conf.toFixed(1)}%)`;
+
         } else {
             resultEl.innerText = "Invalid response from server";
         }
@@ -83,5 +98,5 @@ async function loop() {
         resultEl.innerText = "Prediction error 😞";  // Graceful fallback
     }
 
-    setTimeout(loop, 200);
+    requestAnimationFrame(loop);
 }
