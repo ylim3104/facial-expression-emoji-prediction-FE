@@ -18,13 +18,41 @@
     <div class="window webcam-window">
         <div class="title-bar">Mood Scanner</div>
         <div class="window-content webcam-content">
+            
+            <!-- LIVE Webcam -->
             <video id="webcam" autoplay></video>
+
+            <!-- PHOTO Review -->
+            <div id="preview-container" class="hidden">
+                <img id="captured-photo" />
+            </div>
+
+            <!-- VIDEO Review -->
+            <div id="video-preview-container" class="hidden">
+                <video id="captured-video" controls></video>
+            </div>
+
             <p id="status">Opening webcam...</p>
             <div id="result"></div>
-            <div class="button-row">
+
+            <!-- LIVE Buttons -->
+            <div class="button-row" id="live-buttons">
                 <button class="retro-btn" id="photo-btn">📸 Take Picture</button>
                 <button class="retro-btn" id="video-btn">🎥 Record Video</button>
             </div>
+
+            <!-- PHOTO Review Buttons -->
+            <div class="button-row hidden" id="review-buttons">
+                <button class="retro-btn" id="retake-btn">⟲ Retake</button>
+                <button class="retro-btn" id="save-btn">💾 Save Photo</button>
+            </div>
+
+            <!-- VIDEO Review Buttons -->
+            <div class="button-row hidden" id="video-review-buttons">
+                <button class="retro-btn" id="retake-video-btn">⟲ Retake Video</button>
+                <button class="retro-btn" id="save-video-btn">💾 Save Video</button>
+            </div>
+
         </div>
     </div>
 

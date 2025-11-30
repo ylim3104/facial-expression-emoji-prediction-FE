@@ -154,3 +154,28 @@ video {
         z-index: 9999;
     }
 }
+
+/* In webcam.css */
+
+/* Add the hidden utility class */
+.hidden {
+    display: none !important;
+}
+
+/* Add style for the Capture/Review buttons container */
+.button-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+/* Style for the preview image to fit the container */
+#captured-photo {
+    width: 100%;
+    /* Keep the aspect ratio defined in the video tag */
+    aspect-ratio: 3 / 4; 
+    object-fit: cover; /* Ensures the image covers the area */
+    border: 4px solid #8c4fbb;
+    box-shadow: 4px 4px 0 #000;
+    margin-bottom: 20px;
+}
