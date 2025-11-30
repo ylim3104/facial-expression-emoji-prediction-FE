@@ -48,6 +48,8 @@ document.getElementById("back-btn").addEventListener("click", () => {
 
 // Prediction loop
 async function loop() {
+    if (!webcamElement.videoWidth) return setTimeout(loop, 200);  // Skip if video not ready
+
     const canvas = document.createElement("canvas");
     canvas.width = 48;
     canvas.height = 48;
@@ -55,19 +57,30 @@ async function loop() {
 
     ctx.drawImage(webcamElement, 0, 0, 48, 48);
 
-    const base64 = canvas.toDataURL("image/jpeg");
+    // Strip data URL prefix for pure base64
+    let base64 = canvas.toDataURL("image/jpeg");
+    base64 = base64.split(',')[1];  // Remove "data:image/jpeg;base64,"
 
     try {
-        const response = await fetch("https://keras-api-732861493831.us-central1.run.app/predict-cnn", {
+        const response = await fetch("https://keras-api-y42tkoflha-uc.a.run.app/predict-cnn", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ image: base64 })
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
-        resultEl.innerText = `${data.emotion} (${data.confidence.toFixed(1)}%)`;
+        if (data && data.emotion && data.confidence !== undefined) {
+            resultEl.innerText = `${data.emotion} (${data.confidence.toFixed(1)}%)`;
+        } else {
+            resultEl.innerText = "Invalid response from server";
+        }
     } catch (err) {
-        console.log("Server not reachable:", err);
+        console.error("Prediction failed:", err);
+        resultEl.innerText = "Prediction error 😞";  // Graceful fallback
     }
 
     setTimeout(loop, 200);
