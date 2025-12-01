@@ -105,7 +105,7 @@ async function loop() {
 
     try {
         const response = await fetch(
-            "https://ml-api-y42tkoflha-uc.a.run.app/predict-cnn",
+            "https://emotion-backend-47ip.onrender.com/predict-cnn",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -115,7 +115,8 @@ async function loop() {
         const data = await response.json();
 
         if (data.emotion) {
-            let conf = data.confidence <= 1 ? data.confidence * 100 : data.confidence;
+            let conf = data.confidence;
+            if (conf <= 1) conf *= 100; // sometimes the server may return 0-1
             resultEl.innerText = `${data.emotion} (${conf.toFixed(1)}%)`;
         }
     } catch (err) {
