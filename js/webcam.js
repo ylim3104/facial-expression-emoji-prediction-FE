@@ -105,7 +105,7 @@ async function loop() {
 
     try {
         const response = await fetch(
-            "https://emotion-backend-47ip.onrender.com/predict-cnn",
+            "https://ml-api-y42tkoflha-uc.a.run.app/predict-cnn",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
