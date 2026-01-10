@@ -35,8 +35,8 @@ let lastFaceBox = null;
 let detecting = false;
 
 /* ================= FACE DETECTION ================= */
-const faceDetection = new FaceDetection.FaceDetection({
-    locateFile: file =>
+const faceDetection = new FaceDetection({
+    locateFile: (file) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`
 });
 
