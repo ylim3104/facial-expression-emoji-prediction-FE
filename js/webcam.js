@@ -29,10 +29,10 @@ let videoBlob = null;
 let isRecording = false;
 
 let lastSent = 0;
-const MIN_DELAY = 350;
-let capturedDataURL = null;
+const MIN_DELAY = 400;
 
-let processing = false;
+let lastFaceBox = null;
+let detecting = false;
 
 /* ================= FACE DETECTION ================= */
 const faceDetection = new FaceDetection.FaceDetection({
@@ -42,93 +42,101 @@ const faceDetection = new FaceDetection.FaceDetection({
 
 faceDetection.setOptions({
     model: "short",
-    minDetectionConfidence: 0.6
+    minDetectionConfidence: 0.5
 });
 
-/* ================= WEBCAM CONSTRAINTS ================= */
-const videoConstraints = {
-    video: {
-        width: { ideal: 480 },
-        height: { ideal: 640 },
-        facingMode: "user"
+faceDetection.onResults(results => {
+    if (results.detections && results.detections.length > 0) {
+        lastFaceBox = results.detections[0].boundingBox;
+    } else {
+        lastFaceBox = null;
     }
-};
+});
 
 /* ================= UI STATES ================= */
 function setUIState(state) {
+    webcamElement.classList.add("hidden");
+    previewContainer.classList.add("hidden");
+    videoPreviewContainer.classList.add("hidden");
+
+    liveButtons.classList.add("hidden");
+    reviewButtons.classList.add("hidden");
+    videoReviewButtons.classList.add("hidden");
+
     if (state === "live") {
         webcamElement.classList.remove("hidden");
-        previewContainer.classList.add("hidden");
-        videoPreviewContainer.classList.add("hidden");
-
         liveButtons.classList.remove("hidden");
-        reviewButtons.classList.add("hidden");
-        videoReviewButtons.classList.add("hidden");
-
         photoBtn.disabled = false;
         videoBtn.disabled = false;
-
         statusText.innerText = "Webcam active!";
-        requestAnimationFrame(loop);
+        resultEl.innerText = "";
+    }
+
+    if (state === "photo-review") {
+        previewContainer.classList.remove("hidden");
+        reviewButtons.classList.remove("hidden");
+        statusText.innerText = "Review your photo";
+    }
+
+    if (state === "video-review") {
+        videoPreviewContainer.classList.remove("hidden");
+        videoReviewButtons.classList.remove("hidden");
+        statusText.innerText = "Review your video";
     }
 }
 
 /* ================= START WEBCAM ================= */
 async function startWebcam() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia(videoConstraints);
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user", width: 640, height: 480 }
+        });
         webcamElement.srcObject = stream;
         setUIState("live");
-    } catch {
+        requestAnimationFrame(predictLoop);
+    } catch (err) {
         statusText.innerText = "Failed to open webcam 😢";
+        console.error(err);
     }
 }
 
-/* ================= PREDICTION LOOP ================= */
-async function loop() {
-    if (
-        webcamElement.classList.contains("hidden") ||
-        processing ||
-        !webcamElement.videoWidth
-    ) {
-        return requestAnimationFrame(loop);
-    }
+/* ================= MAIN PREDICTION LOOP ================= */
+async function predictLoop() {
+    requestAnimationFrame(predictLoop);
+
+    if (webcamElement.classList.contains("hidden")) return;
+    if (!webcamElement.videoWidth) return;
 
     const now = Date.now();
-    if (now - lastSent < MIN_DELAY) {
-        return requestAnimationFrame(loop);
-    }
-    lastSent = now;
+    if (now - lastSent < MIN_DELAY) return;
+
+    if (detecting) return;
+    detecting = true;
 
     try {
-        processing = true;
         await faceDetection.send({ image: webcamElement });
     } catch (err) {
         console.warn("Face detection error:", err);
-    } finally {
-        processing = false;
+        detecting = false;
+        return;
     }
 
-    requestAnimationFrame(loop);
-}
+    detecting = false;
 
-/* ================= FACE CROP + SEND ================= */
-faceDetection.onResults(results => {
-    if (webcamElement.classList.contains("hidden")) return;
-
-    if (!results.detections || results.detections.length === 0) {
+    if (!lastFaceBox) {
         resultEl.innerText = "No face detected";
         return;
     }
 
-    const face = results.detections[0].boundingBox;
+    lastSent = now;
+
     const vw = webcamElement.videoWidth;
     const vh = webcamElement.videoHeight;
 
-    let x = face.xCenter * vw - (face.width * vw) / 2;
-    let y = face.yCenter * vh - (face.height * vh) / 2;
-    let w = face.width * vw;
-    let h = face.height * vh;
+    let x = lastFaceBox.xCenter * vw - (lastFaceBox.width * vw) / 2;
+    let y = lastFaceBox.yCenter * vh - (lastFaceBox.height * vh) / 2;
+    let w = lastFaceBox.width * vw;
+    let h = lastFaceBox.height * vh;
 
     x = Math.max(0, x);
     y = Math.max(0, y);
@@ -136,12 +144,12 @@ faceDetection.onResults(results => {
     h = Math.min(vh - y, h);
 
     if (w <= 0 || h <= 0) return;
-    
+
     const canvas = document.createElement("canvas");
     canvas.width = 48;
     canvas.height = 48;
-
     const ctx = canvas.getContext("2d");
+
     ctx.drawImage(webcamElement, x, y, w, h, 0, 0, 48, 48);
 
     // Convert to grayscale
@@ -158,14 +166,10 @@ faceDetection.onResults(results => {
     ctx.putImageData(imgData, 0, 0);
 
     const base64 = canvas.toDataURL("image/jpeg").split(",")[1];
-    sendToBackend(base64);
-});
 
-/* ================= BACKEND CALL ================= */
-async function sendToBackend(base64) {
     try {
         const response = await fetch(
-            "https://emotion-backend-47ip.onrender.com/predict-cnn",
+            "https://keras-api-y42tkoflha-uc.a.run.app/predict-cnn",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -181,8 +185,8 @@ async function sendToBackend(base64) {
                     : data.confidence;
             resultEl.innerText = `${data.emotion} (${conf.toFixed(1)}%)`;
         }
-    } catch {
-        resultEl.innerText = "Prediction error 😞";
+    } catch (err) {
+        console.error("Prediction error:", err);
     }
 }
 
@@ -193,24 +197,15 @@ function takePicture() {
     canvas.height = webcamElement.videoHeight;
     canvas.getContext("2d").drawImage(webcamElement, 0, 0);
 
-    capturedDataURL = canvas.toDataURL("image/png");
-    capturedPhoto.src = capturedDataURL;
-
-    webcamElement.classList.add("hidden");
-    previewContainer.classList.remove("hidden");
-    liveButtons.classList.add("hidden");
-    reviewButtons.classList.remove("hidden");
-
-    statusText.innerText = "Review your photo.";
+    capturedPhoto.src = canvas.toDataURL("image/png");
+    setUIState("photo-review");
 }
 
 function savePicture() {
     const link = document.createElement("a");
-    link.href = capturedDataURL;
-    link.download = `Mood-o-Meter_Photo_${new Date().toISOString()}.png`;
+    link.href = capturedPhoto.src;
+    link.download = `Mood-o-Meter_Photo_${Date.now()}.png`;
     link.click();
-
-    capturedDataURL = null;
     setUIState("live");
 }
 
@@ -229,15 +224,7 @@ function toggleRecording() {
         mediaRecorder.onstop = () => {
             videoBlob = new Blob(recordedChunks, { type: "video/webm" });
             capturedVideo.src = URL.createObjectURL(videoBlob);
-
-            webcamElement.classList.add("hidden");
-            liveButtons.classList.add("hidden");
-
-            videoPreviewContainer.classList.remove("hidden");
-            videoReviewButtons.classList.remove("hidden");
-
-            isRecording = false;
-            videoBtn.innerText = "🎥 Record Video";
+            setUIState("video-review");
         };
 
         mediaRecorder.start();
@@ -247,35 +234,32 @@ function toggleRecording() {
         statusText.innerText = "🎥 Recording...";
     } else {
         mediaRecorder.stop();
+        isRecording = false;
+        videoBtn.innerText = "🎥 Record Video";
     }
 }
 
-/* ================= VIDEO SAVE / RETAKE ================= */
-saveVideoBtn.addEventListener("click", () => {
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(videoBlob);
-    link.download = `Mood-o-Meter_Video_${new Date().toISOString()}.webm`;
-    link.click();
-
-    videoBlob = null;
-    setUIState("live");
-});
-
-retakeVideoBtn.addEventListener("click", () => {
-    videoBlob = null;
-    setUIState("live");
-});
-
 /* ================= EVENTS ================= */
-startWebcam();
-
 photoBtn.addEventListener("click", takePicture);
 retakeBtn.addEventListener("click", () => setUIState("live"));
 saveBtn.addEventListener("click", savePicture);
+
 videoBtn.addEventListener("click", toggleRecording);
+retakeVideoBtn.addEventListener("click", () => setUIState("live"));
+
+saveVideoBtn.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.href = capturedVideo.src;
+    link.download = `Mood-o-Meter_Video_${Date.now()}.webm`;
+    link.click();
+    setUIState("live");
+});
 
 document.getElementById("back-btn").addEventListener("click", () => {
     const stream = webcamElement.srcObject;
     if (stream) stream.getTracks().forEach(t => t.stop());
     window.location.href = "index.html";
 });
+
+/* ================= INIT ================= */
+startWebcam();
